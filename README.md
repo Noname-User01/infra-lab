@@ -1,22 +1,23 @@
 # ubuntu-lab-01 構築ログ
 
-## 環境
-Host PC : Windows
+## 0. 目的
+Linuxサーバ構築の基礎練習
+3年ロードマップ Year1 インフラ基礎
+
+## 1. 環境詳細
+Host OS : Windows 10
+CPU : 2コア
+RAM : 2024MB
 VirtualBox : version ?
-Ubuntu : 24.04.4 LTS
-RAM : 2GB
-CPU : 2
-Disk : 20GB
+Ubuntu ISO : ubuntu-24.04.4-live-server-amd64.iso
 
-## 手順
-1. ISOダウンロード
-2. VM作成
-3. ユーザー nanu 作成
+## 2. 作業ログ
+2026-02-27
+VM作成 ubuntu-lab-01
+user nanu 作成
+ログイン成功
 
-## トラブル
-ログインできなかった
+## 3. トラブル対応
+ログイン不可
 原因：USキーボード配列
-解決：Shift+2で@
-
-## 今日学んだこと
-Linuxは大文字小文字区別
+対策：Shift+2で@
