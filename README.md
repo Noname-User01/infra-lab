@@ -25,10 +25,10 @@ user nanu 作成
 
 
 # 第2章 VMサーバー構築
-## 0 目的
+## 0. 目的
 Host → VM に SSH接続できるようにする
 
-## 1.SSHサーバ導入
+## 1. SSHサーバ導入
 sudo apt update
 sudo apt install openssh-server
 
@@ -36,7 +36,7 @@ sudo apt install openssh-server
 ls -l /usr/sbin/sshd
 ls /etc/ssh/ssh_host_*
 
-## 2.VirtualBox設定
+## 2. VirtualBox設定
 ネットワーク : NAT
 ポートフォワーディング
 Host IP : 127.0.0.1
@@ -44,11 +44,11 @@ Host Port : 2222
 Guest Port : 22
 Protocol : TCP
 
-## 3.接続確認
+## 3. 接続確認
 Host側
 ssh nanu@127.0.0.1 -p 2222
 
-## 4.トラブル対応
+## 4. トラブル対応
 REMOTE HOST IDENTIFICATION HAS CHANGED
 原因:VM再作成でSSHホスト鍵が変わった
 対策:ssh-keygen -R [127.0.0.1]:2222
