@@ -92,80 +92,45 @@ ssh-copy-id nanu@127.0.0.1 -p 2222
 
 ログイン確認 → パスワード無しで接続成功
 
-## 3. パスワードログイン禁止
+# 第3章 SSHセキュリティ強化
+## 1. 目的
 
-/etc/ssh/sshd_config 編集
+公開サーバ最低ライン構築
+Year1 インフラ基礎
+
+## 2. 公開鍵認証構築
+
+ssh-keygen
+authorized_keys 登録
+接続確認
+
+## 3. 認証制限
 
 PasswordAuthentication no
 PermitRootLogin no
+sshd -t
+systemctl restart ssh
 
-sudo sshd -t → configチェック
-sudo systemctl restart ssh
+## 4. fail2ban導入
 
-既存SSHは維持、新規接続は設定適用
+インストール
+enable
+status確認
 
-## 4. トラブル
+ログ監視 → 失敗回数でBAN
 
-sshd -t エラー
-unsupported option Depending/on
-→ コメント文を設定行に入れていた
+## 5. UFW設定
 
-Missing privilege separation directory /run/sshd
-→ sshサービス起動前に手動確認しただけ
+default deny incoming
+allow 22/tcp
+status確認
 
-sudo 無効表示
-→ root禁止ではなく sudo権限不足
+## 6. セキュリティまとめ
 
-## 5. セキュリティ理由
-
-パスワードログイン → 総当たり可能
-公開鍵認証 → 秘密鍵必須
-
-rootログイン禁止 → 攻撃対象を1段減らす
-
-# 第4章 fail2ban 導入
-## 1. 目的
-
-ログイン失敗を自動検知
-攻撃IPを一時BAN
-
-Year1 必須項目
-
-## 2. 導入
-
-sudo apt install fail2ban
-sudo systemctl enable fail2ban
-sudo systemctl start fail2ban
-
-確認
-sudo fail2ban-client status sshd
-
-jail sshd → active
-
-## 3. 動作
-
-SSHログ監視
-連続失敗 → firewallでIP遮断
-
-ブルートフォース対策
-
-# 第5章 UFW ファイアウォール
-## 1. 目的
-
-不要ポート遮断
-攻撃面積削減
-
-## 2. 設定
-
-sudo ufw default deny incoming
-sudo ufw default allow outgoing
-sudo ufw allow 22/tcp
-sudo ufw enable
-
-確認
-sudo ufw status verbose
-
-22/tcp のみ許可
+鍵認証 → 総当たり不可
+root禁止 → 権限集中回避
+fail2ban → bot遮断
+UFW → 攻撃面削減
 
 ## 3. セキュリティ理由
 
