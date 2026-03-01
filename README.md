@@ -78,7 +78,7 @@ REMOTE HOST IDENTIFICATION HAS CHANGED
 原因:VM再作成でSSHホスト鍵が変わった
 対策:ssh-keygen -R [127.0.0.1]:2222
 
-##第3章 SSH公開鍵認証構築
+# 第3章 SSH公開鍵認証構築
 ##0. 目的
 
 Host → VM を公開鍵認証で接続
