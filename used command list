@@ -1,3 +1,75 @@
+#1. VM環境設定
+設定... → 一般 → 詳細
+共有クリップボード：双方向
+ドラッグ＆ドロップ：双方向
+
+対象プロジェクト起動
+
+##2. Guest Additionの導入に移る
+VM起動後 Virtual Boxメニュー
+→デバイス → Guest Additions CDイメージを挿入
+
+VM内で実行するコマンド
+```
+sudo apt update
+sudo apt install build-essential dkms linux-headers-$(uname -r)
+sudo mkdir /media/cdrom
+sudo mount /dev/cdrom /media/cdrom
+sudo /media/cdrom/VBoxLinuxAdditions.run
+sudo reboot
+```
+
+##3. コピーできるかの確認
+try it.
+
+##1入力バグが起きた時の対処方法
+端末のstty設定が壊れた時
+→入力遅延が起き、入力 → enter   で初めて画面に入力が表示される。
+
+この場合コマンドラインに以下のコマンドを入力する事で解決
+```
+reset
+```
+```
+stty sane
+```
+
+ssh鍵確認コマンド
+```
+ls -l ~/.ssh
+```
+
+##ssh ログインパスワードを消去する手順
+1. まずはログイン確認をする
+```
+ssh [Username]@localhost -p 2222
+```
+※別ターミナルでも成功するかを確認する。条件を変えて確認しないとロックアウト → ログインできなくなる
+→今回の設定ではlocalhostの部分を127.0.0.1にする
+```
+ssh nanu@127.0.0.1 -p 2222
+```
+
+2. sshd_config編集
+```
+sudo nano /etc/ssh/sshd_config
+```
+次に以下の項目がコメントアウトされている場合それを外す
+・PasswordAuthentication no
+・ChallengeResponseAuthentication no
+・UsePAM yes
+・PubkeyAuthentication yes
+2.1. ついでにrootログインを停止する
+```
+PermitRootLogin no    #not_root_login
+```
+
+///////////////////////////////////
+ssh一時的に接続できなくなった
+既存の接続は有効でコマンドは実行できるからトラブルを解決次第対策を考える。
+//////////////////////////////////
+
+
 sudo aot update    //install comannd update
 sudo apt install openssh-server -y
 
@@ -9,4 +81,6 @@ sudo systemctl status ssh
 //ホストコマンド
 ssh-keygen -t ed25519    //共通暗号キー生成
 ssh nanu@localhost    //sshへログインを試みる
+
+
 
