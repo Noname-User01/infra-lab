@@ -78,13 +78,13 @@ REMOTE HOST IDENTIFICATION HAS CHANGED
 原因:VM再作成でSSHホスト鍵が変わった
 対策:ssh-keygen -R [127.0.0.1]:2222
 
-第3章 SSH公開鍵認証構築
-0. 目的
+##第3章 SSH公開鍵認証構築
+##0. 目的
 
 Host → VM を公開鍵認証で接続
 パスワード依存の排除
 
-1. 公開鍵作成（Host側）
+## 1. 公開鍵作成（Host側）
 ssh-keygen -t ed25519
 保存場所
 C:\Users\m1150.DESKTOP-IBSS08K.ssh\
@@ -92,18 +92,18 @@ C:\Users\m1150.DESKTOP-IBSS08K.ssh\
 秘密鍵：id_ed25519
 公開鍵：id_ed25519.pub
 
-2. 公開鍵登録（VM側）
+## 2. 公開鍵登録（VM側）
 mkdir -p ~/.ssh
 chmod 700 ~/.ssh
 nano ~/.ssh/authorized_keys
 chmod 600 ~/.ssh/authorized_keys
 公開鍵貼り付け後、保存。
 
-3. 接続確認
+## 3. 接続確認
 ssh nanu@127.0.0.1 -p 2222
 パスワード入力無しでログイン成功。
 
-4. トラブル対応
+## 4. トラブル対応
 
 REMOTE HOST IDENTIFICATION HAS CHANGED
 原因：VM再作成でホスト鍵変更
@@ -128,7 +128,7 @@ sudo systemctl restart ssh
 sshdは接続時のみ受付を担当。
 セッション確立後はforkされたプロセスが継続するため、既存SSHは生存。
 
-5. メモ
+## 5. メモ
 
 SSH設定変更手順
 別セッション確保
