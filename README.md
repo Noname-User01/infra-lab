@@ -78,62 +78,96 @@ REMOTE HOST IDENTIFICATION HAS CHANGED
 原因:VM再作成でSSHホスト鍵が変わった
 対策:ssh-keygen -R [127.0.0.1]:2222
 
-# 第3章 SSH公開鍵認証構築
-##0. 目的
+# 第3章 SSHセキュリティ強化
+## 1. 目的
 
-Host → VM を公開鍵認証で接続
-パスワード依存の排除
+公開鍵認証のみ許可
+ブルートフォース攻撃対策
+Year1 インフラ基礎
 
-## 1. 公開鍵作成（Host側）
+## 2. 公開鍵認証設定
+
 ssh-keygen -t ed25519
-保存場所
-C:\Users\m1150.DESKTOP-IBSS08K.ssh\
+ssh-copy-id nanu@127.0.0.1 -p 2222
 
-秘密鍵：id_ed25519
-公開鍵：id_ed25519.pub
+ログイン確認 → パスワード無しで接続成功
 
-## 2. 公開鍵登録（VM側）
-mkdir -p ~/.ssh
-chmod 700 ~/.ssh
-nano ~/.ssh/authorized_keys
-chmod 600 ~/.ssh/authorized_keys
-公開鍵貼り付け後、保存。
+## 3. パスワードログイン禁止
 
-## 3. 接続確認
-ssh nanu@127.0.0.1 -p 2222
-パスワード入力無しでログイン成功。
+/etc/ssh/sshd_config 編集
 
-## 4. トラブル対応
+PasswordAuthentication no
+PermitRootLogin no
 
-REMOTE HOST IDENTIFICATION HAS CHANGED
-原因：VM再作成でホスト鍵変更
-対策：ssh-keygen -R [127.0.0.1]:2222
-
-ssh.service failed
-sshd_config 編集ミスにより起動失敗。
-sudo sshd -t で構文エラー検出。
-修正後、systemctl restart ssh で復旧。
-
-Bad configuration option / unsupported option
-設定行に不要文字や英文が混入。
-コメントは行頭に # が必要。
-
-Missing privilege separation directory: /run/sshd
-sshd起動失敗によりディレクトリ未生成。
-
-sudo mkdir -p /run/sshd
+sudo sshd -t → configチェック
 sudo systemctl restart ssh
 
-新規接続不可・既存接続は維持
-sshdは接続時のみ受付を担当。
-セッション確立後はforkされたプロセスが継続するため、既存SSHは生存。
+既存SSHは維持、新規接続は設定適用
 
-## 5. メモ
+## 4. トラブル
 
-SSH設定変更手順
-別セッション確保
+sshd -t エラー
+unsupported option Depending/on
+→ コメント文を設定行に入れていた
 
-sudo sshd -t
-systemctl restart ssh
+Missing privilege separation directory /run/sshd
+→ sshサービス起動前に手動確認しただけ
 
-新規接続確認後に旧セッション終了
+sudo 無効表示
+→ root禁止ではなく sudo権限不足
+
+## 5. セキュリティ理由
+
+パスワードログイン → 総当たり可能
+公開鍵認証 → 秘密鍵必須
+
+rootログイン禁止 → 攻撃対象を1段減らす
+
+# 第4章 fail2ban 導入
+## 1. 目的
+
+ログイン失敗を自動検知
+攻撃IPを一時BAN
+
+Year1 必須項目
+
+## 2. 導入
+
+sudo apt install fail2ban
+sudo systemctl enable fail2ban
+sudo systemctl start fail2ban
+
+確認
+sudo fail2ban-client status sshd
+
+jail sshd → active
+
+## 3. 動作
+
+SSHログ監視
+連続失敗 → firewallでIP遮断
+
+ブルートフォース対策
+
+# 第5章 UFW ファイアウォール
+## 1. 目的
+
+不要ポート遮断
+攻撃面積削減
+
+## 2. 設定
+
+sudo ufw default deny incoming
+sudo ufw default allow outgoing
+sudo ufw allow 22/tcp
+sudo ufw enable
+
+確認
+sudo ufw status verbose
+
+22/tcp のみ許可
+
+## 3. セキュリティ理由
+
+開放ポート少ない → 攻撃経路減少
+fail2ban と併用 → 二重防御
