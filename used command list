@@ -95,5 +95,60 @@ sudo sshd -t
 ssh-keygen -t ed25519    //共通暗号キー生成
 ssh nanu@localhost    //sshへログインを試みる
 
+## Pythonを導入する方法
+まずは以下のコマンドを入力しディレクトリを作成
+```
+mkdir ~.infra-lab    //ディレクトリの作成
+cd ~/infra-lab     //作成したディレクトリへ移動
+```
+
+Pythonのインストール
+```
+sudo apt update
+sudo apt install python
+sudo apt install pyrhon3.12-venv
+
+python -m venv venv    //仮想環境作成
+source venv/bin/activate     //仮想環境有効化
+
+pip install --upgrade pip    //pip 更新
+pip install fastapi uvicorn    //fastapi & uvicornのインストール
+```
+
+新規ファイルを作る方法
+```
+nano [ファイル名]
+```
+
+
+新規でポートもあけておきましょう
+```
+sudo ufw allow 8000/tcp
+sudo ufw status verbose
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
