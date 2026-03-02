@@ -1,11 +1,11 @@
-#1. VM環境設定
+# 1. VM環境設定
 設定... → 一般 → 詳細
 共有クリップボード：双方向
 ドラッグ＆ドロップ：双方向
 
 対象プロジェクト起動
 
-##2. Guest Additionの導入に移る
+## 2. Guest Additionの導入に移る
 VM起動後 Virtual Boxメニュー
 →デバイス → Guest Additions CDイメージを挿入
 
@@ -19,10 +19,10 @@ sudo /media/cdrom/VBoxLinuxAdditions.run
 sudo reboot
 ```
 
-##3. コピーできるかの確認
+## 3. コピーできるかの確認
 try it.
 
-##1入力バグが起きた時の対処方法
+## 1入力バグが起きた時の対処方法
 ###ssh server 起動確認コマンド
 ```
  sudo systemctl status ssh
@@ -43,7 +43,7 @@ ssh鍵確認コマンド
 ls -l ~/.ssh
 ```
 
-##ssh ログインパスワードを消去する手順
+ssh ログインパスワードを消去する手順
 1. まずはログイン確認をする
 ```
 ssh [Username]@localhost -p 2222
@@ -54,7 +54,7 @@ ssh [Username]@localhost -p 2222
 ssh nanu@127.0.0.1 -p 2222
 ```
 
-2. sshd_config編集
+## 2. sshd_config編集
 ```
 sudo nano /etc/ssh/sshd_config
 ```
@@ -102,7 +102,7 @@ mkdir ~.infra-lab    //ディレクトリの作成
 cd ~/infra-lab     //作成したディレクトリへ移動
 ```
 
-Pythonのインストール
+### Pythonのインストール
 ```
 sudo apt update
 sudo apt install python
@@ -115,17 +115,39 @@ pip install --upgrade pip    //pip 更新
 pip install fastapi uvicorn    //fastapi & uvicornのインストール
 ```
 
-新規ファイルを作る方法
+サーバー起動コマンド
+```
+uvicorn test:app --host 127.0.0.1 --port 8000
+```
+
+fastAPI用の.py新規ファイルを作る方法
 ```
 nano [ファイル名]
 ```
+内容
+```
+from fastapi import FastAPI
 
+app = FastAPI()
+
+@app.get("/")
+def read_root():
+    return{"message:"Hello World"}
+```
+
+ブラウザに    http://127.0.0.1:8000    を入力
 
 新規でポートもあけておきましょう
 ```
 sudo ufw allow 8000/tcp
 sudo ufw status verbose
 ```
+
+## FastAPIの構築
+
+
+
+
 
 
 
@@ -161,8 +183,29 @@ stauts → active☑ 確認
 
 
 
+## Ngineの導入
+```
+sudo apt install nginx
+```
 
+サーバー設定ファイル
+```
+sudo nano /etc/nginx/sites-available/fastapi
+```
 
+内容
+```
+server {
+    listen 80;
+    server_name _;
+
+    location / {
+        proxy_pass http://127.0.0.1:8000;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+    }
+}
+```
 
 
 
