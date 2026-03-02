@@ -129,7 +129,35 @@ sudo ufw status verbose
 
 
 
+systemdサービス化
+```
+sudo nano /etc/systemd/system/fastapi.service
+```
 
+記載内容
+```
+[Unit]
+Description=FastAPI App
+After=network.target
+
+[Service]
+User=nanu
+WorkingDirectory=/home/nanu/infra-lab/app
+ExecStart=/home/nanu/infra-lab/venv/bin/uvicorn main:app --host 127.0.0.1 --port 8000
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
+```
+
+サーバー状態確認
+```
+sudo systemctl daemon-reload
+sudo systemctl enable fastapi
+sudo systemctl start fastapi
+sudo systemctl status fastapi
+```
+stauts → active☑ 確認
 
 
 
