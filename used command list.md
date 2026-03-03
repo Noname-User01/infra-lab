@@ -203,6 +203,11 @@ stauts → active☑ 確認
 
 
 ## Ngineの導入
+Nginx（エンジンエックス）とは
+高速な処理と高い同時接続性を特徴とする、オープンソースのWebサーバーソフトウェア<br>
+役割はサーバーに飛んでくるリクエストを整理する事が目的
+言語はC言語で作られているのに対し、FastAPIのUvicornはPyhtonで作成されている為処理能力はNginXに比べ劣る。
+
 ```
 sudo apt install nginx
 ```
