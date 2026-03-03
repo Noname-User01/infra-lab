@@ -113,6 +113,9 @@ ssh nanu@localhost    //sshへログインを試みる
 mkdir ~.infra-lab    //ディレクトリの作成
 cd ~/infra-lab     //作成したディレクトリへ移動
 ```
+現在の階層
+~/infra-lab/
+
 
 ### Pythonのインストール
 ```
