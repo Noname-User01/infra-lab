@@ -92,18 +92,6 @@ ssh-copy-id nanu@127.0.0.1 -p 2222
 
 ログイン確認 → パスワード無しで接続成功
 
-# 第3章 SSHセキュリティ強化
-## 1. 目的
-
-公開サーバ最低ライン構築
-Year1 インフラ基礎
-
-## 2. 公開鍵認証構築
-
-ssh-keygen
-authorized_keys 登録
-接続確認
-
 ## 3. 認証制限
 
 PasswordAuthentication no
@@ -136,9 +124,6 @@ UFW → 攻撃面削減
 
 開放ポート少ない → 攻撃経路減少
 fail2ban と併用 → 二重防御
-
-以下は 第4章（nginx + FastAPI 構築まとめ） を
-あなたの README.md にそのまま貼れる形式で生成したものです。
 
 # 第4章 nginx + FastAPI リバースプロキシ構築
 
