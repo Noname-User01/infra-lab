@@ -115,7 +115,7 @@ status確認
 
 ## 6. セキュリティまとめ
 
-鍵認証 → 総当たり不可
+鍵認証 → パうワード総当たり不可
 root禁止 → 権限集中回避
 fail2ban → bot遮断
 UFW → 攻撃面削減
@@ -178,6 +178,14 @@ sudo systemctl status fastapi
 ```
 
 ## 3. nginx リバースプロキシ設定
+
+障害対策用コマンド
+```
+ss -tulnp でポート確認
+journalctl -u fastapi ログ確認
+nginx error.log の確認方法
+```
+
 ### 設定ファイル作成
 ```bash
 sudo nano /etc/nginx/sites-available/fastapi
@@ -235,4 +243,40 @@ curl http://127.0.0.1:8000
 - nginx は外部からの入口としての交通整理と境界防御を担当
 - uvicorn（FastAPI）は内部ポート 8000 でアプリ実行
 - systemd はプロセス監視と自動再起動を担当
+
+## ssh理解の追記
+・公開鍵暗号化の基本
+SSHでは公開鍵暗号を使用して相手が本人か、通信が盗まれないかを保証する
+・公開鍵 (public key)      //見られてもいい鍵
+・秘密鍵（private key）    //漏らしてはいけない鍵
+
+公開鍵で暗号化した物は秘密鍵でしか復号できない。
+→秘密鍵で暗号化した物は公開鍵で検証できる
+
+・challenge-response認証(チャレンジレスポンス)<br>
+     user → login please<br>
+     server → user ランダムな文字列(challenge)を返す<br>
+     user → 秘密鍵でchallengeを変える<br>
+     server → 公開鍵で署名を検証する<br>SSH では、クライアント側に known_hosts というファイルがあります。
+     ✅正しければ本物だとしてログイン許可
+
+→秘密鍵やパスワードを送信する事なく認証ができる。
+
+・known_hosts の役割
+SSHではクライアント側に known_hosts というファイルがある。
+これはこのサーバーの公開鍵（フィンガープリント）はこれだという名簿
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
